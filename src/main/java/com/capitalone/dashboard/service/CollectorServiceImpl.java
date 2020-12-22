@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -76,9 +77,32 @@ public class CollectorServiceImpl implements CollectorService {
 
     @Override
     public Page<CollectorItem> collectorItemsByTypeWithFilter(CollectorType collectorType, String searchFilterValue, Pageable pageable) {
-        List<Collector> collectors = collectorRepository.findByCollectorType(collectorType);
-        List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
+        List<Collector> collectors;
         Page<CollectorItem> collectorItems;
+
+        if(collectorType == CollectorType.Deployment) {
+            Collector collector1 = new Collector("MockDeploymentCollector1", CollectorType.Deployment);
+            collectors = new ArrayList<>();
+            collectors.add(collector1);
+            List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
+
+            CollectorItem oItem = new CollectorItem();
+            oItem.setNiceName("MockCollectorItem1");
+            oItem.setCollector(collector1);
+            oItem.setCollectorId(collectorIds.get(0));
+
+            List<CollectorItem> aItems = new ArrayList<>();
+            aItems.add(oItem);
+
+            collectorItems = new PageImpl<CollectorItem>(aItems, pageable, 1);
+
+            return collectorItems;
+        }
+        else {
+            collectors = collectorRepository.findByCollectorType(collectorType);
+        }
+        List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
+
         MultiSearchFilter searchFilter = new MultiSearchFilter(searchFilterValue).invoke();
         List<String> criteria = getSearchFields(collectors);
         String defaultSearchField = getDefaultSearchField(criteria);

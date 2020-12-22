@@ -12,8 +12,10 @@ import com.capitalone.dashboard.util.PaginationHeaderUtility;
 import org.apache.commons.collections.MapUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -121,6 +124,9 @@ public class CollectorController {
             produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CollectorItem>> collectorItemsByType(@PathVariable CollectorType collectorType, @RequestParam(value = "search", required = false, defaultValue = "") String descriptionFilter, @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {
         Page<CollectorItem> pageOfCollectorItems = collectorService.collectorItemsByTypeWithFilter(collectorType, descriptionFilter, pageable);
+        CollectorItem oItem = new CollectorItem();
+        oItem.setNiceName("TestItem1");
+
         return ResponseEntity
                 .ok()
                 .headers(paginationHeaderUtility.buildPaginationHeaders(pageOfCollectorItems))
