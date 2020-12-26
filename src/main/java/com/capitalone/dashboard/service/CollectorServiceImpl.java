@@ -92,6 +92,12 @@ public class CollectorServiceImpl implements CollectorService {
         item.setCollectorId(collector.getId());
         item.setCollector(collector);
         item.setDescription(desc);
+        item.setNiceName(desc+" name");
+        Map options = new HashMap();
+        options.put("instanceUrl", "http://mytest.com/instanceUrl");
+        options.put("applicationName", "deployApp");
+        options.put("applicationId", "appId12345");
+        item.setOptions(options);
         item.setEnabled(enabled);
         return item;
     }

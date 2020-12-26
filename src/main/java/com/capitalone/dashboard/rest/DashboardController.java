@@ -84,7 +84,8 @@ public class DashboardController {
     @RequestMapping(value = "/dashboard/{id}", method = GET,
             produces = APPLICATION_JSON_VALUE)
     public Dashboard getDashboard(@PathVariable ObjectId id) {
-        return dashboardService.get(id);
+        Dashboard myDashboard = dashboardService.get(id);
+        return myDashboard;
     }
 
     @DashboardOwnerOrAdmin
