@@ -82,17 +82,39 @@ public class CollectorServiceImpl implements CollectorService {
 
         if(collectorType == CollectorType.Deployment) {
             Collector collector1 = new Collector("MockDeploymentCollector1", CollectorType.Deployment);
+            collector1.setEnabled(true);
+            collector1.setOnline(true);
+
+            Collector collector2 = new Collector("MockDeploymentCollector2", CollectorType.Deployment);
+            Collector collector3 = new Collector("MockDeploymentCollector3", CollectorType.Deployment);
             collectors = new ArrayList<>();
             collectors.add(collector1);
+            collectors.add(collector2);
+            collectors.add(collector3);
             List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
 
             CollectorItem oItem = new CollectorItem();
-            oItem.setNiceName("MockCollectorItem1");
+            oItem.setNiceName("MockCollectorItem0");
             oItem.setCollector(collector1);
             oItem.setCollectorId(collectorIds.get(0));
+            oItem.setEnabled(true);
+            oItem.setPushed(true);
+
+
+            CollectorItem oItem1 = new CollectorItem();
+            oItem.setNiceName("MockCollectorItem1");
+            oItem.setCollector(collector2);
+            oItem.setCollectorId(collectorIds.get(1));
+
+            CollectorItem oItem2 = new CollectorItem();
+            oItem.setNiceName("MockCollectorItem2");
+            oItem.setCollector(collector3);
+            oItem.setCollectorId(collectorIds.get(2));
 
             List<CollectorItem> aItems = new ArrayList<>();
             aItems.add(oItem);
+//            aItems.add(oItem1);
+//            aItems.add(oItem2);
 
             collectorItems = new PageImpl<CollectorItem>(aItems, pageable, 1);
 
