@@ -117,7 +117,8 @@ public class CollectorController {
     @RequestMapping(value = "/collector/item/component/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CollectorItem>> getCollectorItemByComponentId(@PathVariable String id,
                                                                              @RequestParam(value = "type", required = true) String type) {
-        return ResponseEntity.ok(collectorService.getCollectorItemForComponent(id, type));
+        List<CollectorItem> collectorItems = collectorService.getCollectorItemForComponent(id, type);
+        return ResponseEntity.ok(collectorItems);
     }
 
     @RequestMapping(value = "/collector/item/type/{collectorType}", method = GET,
