@@ -105,8 +105,8 @@ public class CollectorServiceImpl implements CollectorService {
     public static List makeCollectionItmes(){
         Collector collector = makeCollector("MockDeployCollector", CollectorType.Deployment);
         CollectorItem item1 = makeCollectorItem(collector, "Deploy 1", false);
-        CollectorItem item2 = makeCollectorItem(collector, "Deploy 2", true);
-        List cis = Arrays.asList(item1, item2);
+//        CollectorItem item2 = makeCollectorItem(collector, "Deploy 2", true);
+        List cis = Arrays.asList(item1);//, item2);
 
         return cis;
     }

@@ -121,43 +121,84 @@ public class DeployServiceImpl implements DeployService {
         for (CollectorItem item : deployCollectorItems) {
             ObjectId collectorItemId = item.getId();
 
-            EnvironmentComponent mockEC = new EnvironmentComponent();
-            mockEC.setCollectorItemId(item.getId());
-            String componentName = "mockEnvironmentComponent1";
-            mockEC.setComponentName(componentName);
-            mockEC.setDeployed(true);
-            mockEC.setDeployTime(888);
-            mockEC.setComponentVersion("mockec version 1");
-            String environmentName = "mockEnvironment1";
-            mockEC.setEnvironmentName(environmentName);
-            mockEC.setApplicationName("mockDeployApp1");
-            String componentID = "mockComponentID1";
-            mockEC.setComponentID(componentID);
-            mockEC.setComponentPath("\\somewhere\\subfolder\\comp1");
-            mockEC.setEnvironmentUrl("localhost\\urltoenv\\env1");
-            mockEC.setJobStageName("mockJobStage1");
-            mockEC.setJobStageStatus("mockJobFinished");
-            mockEC.setJobUrl("localhost\\urltojob\\job1");
-            mockEC.setServiceName("mockService1");
-            mockEC.setEnvironmentID("mockEnvironmentID1");
-            mockEC.setId(ObjectId.get());
-
-            EnvironmentStatus mockES = new EnvironmentStatus();
-
-            mockES.setComponentName(componentName);
-            mockES.setOnline(true);
-            mockES.setEnvironmentName(environmentName);
-            mockES.setCollectorItemId(item.getId());
-            mockES.setComponentID(componentID);
-            mockES.setResourceName("mockResourceName1");
-            mockES.setParentAgentName("mockParentAgent1");
-            mockES.setId(ObjectId.get());
-
             List<EnvironmentComponent> components = new ArrayList<>();
-            components.add(mockEC);
-
             List<EnvironmentStatus> statuses = new ArrayList<>();
-            statuses.add(mockES);
+
+            String[] envNames = {"DEV", "QA", "Product"};
+
+            for(int i = 0; i < 3; i++) {
+
+                String environmentName = envNames[i] + " " + item.getNiceName();
+
+                EnvironmentComponent mockEC = new EnvironmentComponent();
+                mockEC.setCollectorItemId(item.getId());
+                String componentName = "mockEnvComp1" + item.getNiceName();
+                mockEC.setComponentName(componentName);
+                mockEC.setDeployed(true);
+                mockEC.setDeployTime(888);
+                mockEC.setComponentVersion("mockec version 1." + i);
+
+                mockEC.setEnvironmentName(environmentName);
+                mockEC.setApplicationName("mockDeployApp1");
+                String componentID = "mockCompID1" + item.getId();
+                mockEC.setComponentID(componentID);
+                mockEC.setComponentPath("\\somewhere\\subfolder\\comp1");
+                mockEC.setEnvironmentUrl("localhost\\urltoenv\\env1");
+                mockEC.setJobStageName("mockJobStage1");
+                mockEC.setJobStageStatus("mockJobFinished");
+                mockEC.setJobUrl("localhost\\urltojob\\job1");
+                mockEC.setServiceName("mockService1");
+                mockEC.setEnvironmentID("mockEnvironmentID1");
+                mockEC.setId(ObjectId.get());
+
+                EnvironmentStatus mockES = new EnvironmentStatus();
+
+                mockES.setComponentName(componentName);
+                mockES.setOnline(true);
+                mockES.setEnvironmentName(environmentName);
+                mockES.setCollectorItemId(item.getId());
+                mockES.setComponentID(componentID);
+                mockES.setResourceName("mockResourceName1");
+                mockES.setParentAgentName("mockParentAgent1");
+                mockES.setId(ObjectId.get());
+
+                components.add(mockEC);
+                statuses.add(mockES);
+
+                EnvironmentComponent mockEC2 = new EnvironmentComponent();
+                mockEC2.setCollectorItemId(item.getId());
+                componentName = "mockEnvComp2" + item.getNiceName();
+                mockEC2.setComponentName(componentName);
+                mockEC2.setDeployed(true);
+                mockEC2.setDeployTime(888);
+                mockEC2.setComponentVersion("mockEC2 version 1." + i);
+//            environmentName = "mockEnvironment2" + item.getNiceName();
+                mockEC2.setEnvironmentName(environmentName);
+                mockEC2.setApplicationName("mockDeployApp1");
+                componentID = "mockCompID2" + item.getId();
+                mockEC2.setComponentID(componentID);
+                mockEC2.setComponentPath("\\somewhere\\subfolder\\comp1");
+                mockEC2.setEnvironmentUrl("localhost\\urltoenv\\env1");
+                mockEC2.setJobStageName("mockJobStage1");
+                mockEC2.setJobStageStatus("mockJobFinished");
+                mockEC2.setJobUrl("localhost\\urltojob\\job1");
+                mockEC2.setServiceName("mockService1");
+                mockEC2.setEnvironmentID("mockEnvironmentID1");
+                mockEC2.setId(ObjectId.get());
+
+                EnvironmentStatus mockES2 = new EnvironmentStatus();
+                mockES2.setComponentName(componentName);
+                mockES2.setOnline(false);
+                mockES2.setEnvironmentName(environmentName);
+                mockES2.setCollectorItemId(item.getId());
+                mockES2.setComponentID(componentID);
+                mockES2.setResourceName("mockResourceName2");
+                mockES2.setParentAgentName("mockParentAgent2");
+                mockES2.setId(ObjectId.get());
+
+                components.add(mockEC2);
+                statuses.add(mockES2);
+            }
 
             groupByEnvironment(
                     components).forEach((env, value) -> {
