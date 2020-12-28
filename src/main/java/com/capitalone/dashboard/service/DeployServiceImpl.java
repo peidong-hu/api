@@ -93,10 +93,82 @@ public class DeployServiceImpl implements DeployService {
     public DataResponse<List<Environment>> getDeployStatus(ObjectId componentId) {
         Component component = componentRepository.findOne(componentId);
 
-        Collection<CollectorItem> cis = component.getCollectorItems()
+        Collection<CollectorItem> cis;
+
+        cis = component.getCollectorItems()
                 .get(CollectorType.Deployment);
 
+        if((cis == null) || cis.isEmpty())
+        {
+            // mock data
+            cis = CollectorServiceImpl.makeCollectionItmes();
+
+            return getMockDeployStatus(cis);
+        }
         return getDeployStatus(cis);
+    }
+
+    private DataResponse<List<Environment>> getMockDeployStatus(Collection<CollectorItem> deployCollectorItems) {
+        List<Environment> environments = new ArrayList<>();
+        long lastExecuted = 0;
+
+        if (deployCollectorItems == null) {
+            return new DataResponse<>(environments, 0);
+        }
+
+        // We will assume that if the component has multiple deployment collectors
+        // then each collector will have a different url which means each Environment will be different
+        for (CollectorItem item : deployCollectorItems) {
+            ObjectId collectorItemId = item.getId();
+
+            EnvironmentComponent mockEC = new EnvironmentComponent();
+            mockEC.setCollectorItemId(item.getId());
+            String componentName = "mockEnvironmentComponent1";
+            mockEC.setComponentName(componentName);
+            mockEC.setDeployed(true);
+            mockEC.setDeployTime(888);
+            mockEC.setComponentVersion("mockec version 1");
+            String environmentName = "mockEnvironment1";
+            mockEC.setEnvironmentName(environmentName);
+            mockEC.setApplicationName("mockDeployApp1");
+            String componentID = "mockComponentID1";
+            mockEC.setComponentID(componentID);
+            mockEC.setComponentPath("\\somewhere\\subfolder\\comp1");
+            mockEC.setEnvironmentUrl("localhost\\urltoenv\\env1");
+            mockEC.setJobStageName("mockJobStage1");
+            mockEC.setJobStageStatus("mockJobFinished");
+            mockEC.setJobUrl("localhost\\urltojob\\job1");
+            mockEC.setServiceName("mockService1");
+            mockEC.setEnvironmentID("mockEnvironmentID1");
+            mockEC.setId(ObjectId.get());
+
+            EnvironmentStatus mockES = new EnvironmentStatus();
+
+            mockES.setComponentName(componentName);
+            mockES.setOnline(true);
+            mockES.setEnvironmentName(environmentName);
+            mockES.setCollectorItemId(item.getId());
+            mockES.setComponentID(componentID);
+            mockES.setResourceName("mockResourceName1");
+            mockES.setParentAgentName("mockParentAgent1");
+            mockES.setId(ObjectId.get());
+
+            List<EnvironmentComponent> components = new ArrayList<>();
+            components.add(mockEC);
+
+            List<EnvironmentStatus> statuses = new ArrayList<>();
+            statuses.add(mockES);
+
+            groupByEnvironment(
+                    components).forEach((env, value) -> {
+                environments.add(env);
+                value.forEach(envComponent -> env.getUnits().add(
+                        new DeployableUnit(envComponent, servers(envComponent,
+                                statuses))));
+            });
+
+        }
+        return new DataResponse<>(environments, lastExecuted);
     }
 
     private DataResponse<List<Environment>> getDeployStatus(Collection<CollectorItem> deployCollectorItems) {

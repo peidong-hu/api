@@ -54,7 +54,8 @@ public class DeployController {
 
     @RequestMapping(value = "/deploy/status/{componentId}", method = GET, produces = APPLICATION_JSON_VALUE)
     public DataResponse<List<Environment>> deployStatus(@PathVariable ObjectId componentId) {
-        return deployService.getDeployStatus(componentId);
+        DataResponse<List<Environment>> oResp = deployService.getDeployStatus(componentId);
+        return oResp;
     }
 
     @RequestMapping(value = "/deploy/status/application/{applicationName}", method = GET, produces = APPLICATION_JSON_VALUE)
