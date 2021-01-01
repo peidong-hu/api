@@ -153,9 +153,26 @@ public class CollectorServiceImpl implements CollectorService {
 
     @Override
     public Page<CollectorItem> collectorItemsByTypeWithFilter(CollectorType collectorType, String searchFilterValue, String searchField, Pageable pageable) {
-        List<Collector> collectors = collectorRepository.findByCollectorType(collectorType);
-        List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
+        List<Collector> collectors;
         Page<CollectorItem> collectorItems;
+
+        if(collectorType == CollectorType.Deployment) {
+
+            collectors = collectorRepository.findByCollectorType(collectorType);
+
+            // mock only if we don't have the collectors
+            if(collectors.isEmpty()) {
+
+                Page<CollectorItem> pages = new PageImpl<CollectorItem>(makeCollectionItmes(), null, 2);
+
+                return pages;
+            }
+        }
+        else {
+            collectors = collectorRepository.findByCollectorType(collectorType);
+        }
+
+        List<ObjectId> collectorIds = Lists.newArrayList(Iterables.transform(collectors, new ToCollectorId()));
         collectorItems = collectorItemRepository.findByCollectorIdAndSearchField(collectorIds,searchField,searchFilterValue,pageable);
         removeJobUrlAndInstanceUrl(collectorItems);
         for (CollectorItem options : collectorItems) {
