@@ -56,7 +56,8 @@ public class CodeProgressController {
 
     @RequestMapping(value = "/code-progress/status/application/{applicationName}", method = GET, produces = APPLICATION_JSON_VALUE)
     public DataResponse<List<Environment>> deployStatus(@PathVariable String applicationName) {
-        return deployService.getDeployStatus(applicationName);
+        DataResponse<List<Environment>> oResp = deployService.getDeployStatus(applicationName);
+        return oResp;
     }
 
     @RequestMapping(value = "/code-progress", method = POST,

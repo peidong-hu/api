@@ -124,11 +124,11 @@ public class DeployServiceImpl implements DeployService {
             List<EnvironmentComponent> components = new ArrayList<>();
             List<EnvironmentStatus> statuses = new ArrayList<>();
 
-            String[] envNames = {"DEV", "QA", "Product"};
+            String[] envNames = {"DEV", "QA", "PROD"};
 
             for(int i = 0; i < 3; i++) {
 
-                String environmentName = envNames[i] + " " + item.getNiceName();
+                String environmentName = envNames[i];// + " " + item.getNiceName();
 
                 EnvironmentComponent mockEC = new EnvironmentComponent();
                 mockEC.setCollectorItemId(item.getId());
