@@ -132,11 +132,11 @@ public class DeployServiceImpl implements DeployService {
 
                 EnvironmentComponent mockEC = new EnvironmentComponent();
                 mockEC.setCollectorItemId(item.getId());
-                String componentName = "mockEnvComp1" + item.getNiceName();
+                String componentName = "mock" + item.getDescription() + "- component1";
                 mockEC.setComponentName(componentName);
                 mockEC.setDeployed(true);
                 mockEC.setDeployTime(888);
-                mockEC.setComponentVersion("mockec version 1." + i);
+                mockEC.setComponentVersion("mockcomp version 1.1." + i);
 
                 mockEC.setEnvironmentName(environmentName);
                 mockEC.setApplicationName("mockDeployApp1");
@@ -167,11 +167,11 @@ public class DeployServiceImpl implements DeployService {
 
                 EnvironmentComponent mockEC2 = new EnvironmentComponent();
                 mockEC2.setCollectorItemId(item.getId());
-                componentName = "mockEnvComp2" + item.getNiceName();
+                componentName = "mock" + item.getDescription() + "- component2";
                 mockEC2.setComponentName(componentName);
                 mockEC2.setDeployed(true);
                 mockEC2.setDeployTime(888);
-                mockEC2.setComponentVersion("mockEC2 version 1." + i);
+                mockEC2.setComponentVersion("mockcomp version 1.2." + i);
 //            environmentName = "mockEnvironment2" + item.getNiceName();
                 mockEC2.setEnvironmentName(environmentName);
                 mockEC2.setApplicationName("mockDeployApp1");
